@@ -17,6 +17,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+
+tasks.register<JavaExec>("ground") {
+    mainClass.set("com.khilafat.GroundKt")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
 repositories {
     mavenCentral()
 }

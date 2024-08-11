@@ -6,14 +6,15 @@ import org.iq80.leveldb.impl.Iq80DBFactory.factory
 import java.io.File
 
 fun main() {
-    val options = Options()
-    options.createIfMissing(true)
-    val ikhwandb = try {
-        factory.open(File("ikhwandb.db"),options)
-    }catch (e: Exception){
-        factory.open(File("ikhwandb_test.db"),options)
-    }
-    ikhwandb.use { ikhwandb ->
-        ikhwandb.put(bytes("0"), bytes("localhost:8080"))
-    }
+    println("Hello world")
+//    val options = Options()
+//    options.createIfMissing(true)
+//    val ikhwandb = try {
+//        factory.open(File("ikhwandb.db"),options)
+//    }catch (e: Exception){
+//        factory.open(File("ikhwandb_test.db"),options)
+//    }
+//    ikhwandb.use { ikhwandb ->
+//        ikhwandb.put(bytes("0"), bytes("localhost:8080"))
+//    }
 }
