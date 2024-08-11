@@ -12,9 +12,9 @@ import io.ktor.utils.io.core.*
 import kotlinx.coroutines.runBlocking
 import java.nio.ByteBuffer
 
-fun main() {
-    syncTheDB()
-}
+//fun main() {
+//    syncTheDB()
+//}
 
 fun syncTheDB() = runBlocking {
 //fun syncTheDB(blockchain: Blockchain, peerAddress: String, lastIndex: Int) = runBlocking {
