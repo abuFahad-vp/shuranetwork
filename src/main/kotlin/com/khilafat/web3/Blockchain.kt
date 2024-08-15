@@ -50,7 +50,7 @@ class Blockchain {
     }
 
     fun addBlock(block: Block): Boolean {
-        if (block.previousHash == getLatestBlock().hash) {
+        if (size == 0 || block.previousHash == getLatestBlock().hash) {
             println("Adding a Block....")
             val batch = db.createWriteBatch()
             batch.use { batch ->
