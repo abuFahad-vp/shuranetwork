@@ -75,6 +75,10 @@ class Blockchain {
         return getByIndex(index).hash
     }
 
+    fun getLatestHash(): String {
+        return getHashByIndex(currentIndex)
+    }
+
     fun getByIndex(index: Int): Block {
         if (index in 0..currentIndex) {
             val value = asString(db.get(intToBytes(index)))
