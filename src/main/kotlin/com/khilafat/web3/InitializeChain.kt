@@ -25,14 +25,15 @@ suspend fun maxChainSizeAndAddr(blockchain: Blockchain, peers: List<String>): Tr
         var size = blockchain.size()
         var truePeer = ""
         var maxHash = ""
-        for (peer in peers) {
+        val indexOfhash = if (size == 0) 0 else size - 1
+            for (peer in peers) {
             println("peer = $peer")
             try {
                 val responseSizeRaw = client.get("http://$peer/size")
                 if (responseSizeRaw.status.isSuccess()) {
                     val responseSize = responseSizeRaw.bodyAsText().toInt()
-                    if (size in 1..<responseSize) {
-                        val responseHash = client.get("http://$peer/block/hash/${size-1}")
+                    if (size < responseSize) {
+                        val responseHash = client.get("http://$peer/block/hash/$indexOfhash")
                         if (responseHash.status.isSuccess()) {
                             maxHash = responseHash.bodyAsText()
                         }
