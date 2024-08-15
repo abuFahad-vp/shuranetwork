@@ -60,6 +60,14 @@ fun Application.configureRouting(blockchain: Blockchain, peerdb: Peers) {
         }
 
         route("/block") {
+            get("/hash/{index}") {
+                val parameters = call.parameters["index"] ?: "0"
+                try {
+                    call.respond(blockchain.getHashByIndex(parameters.toInt()))
+                }catch (e:Exception) {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
             get("/{index}") {
                 val parameters = call.parameters["index"] ?: "0"
                 try {

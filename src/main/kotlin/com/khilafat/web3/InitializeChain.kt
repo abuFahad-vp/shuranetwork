@@ -10,38 +10,45 @@ import kotlinx.coroutines.runBlocking
 
 fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
     val allPeers = peers.allpeers()
-    val (maxSize, maxAddr) = maxChainSizeAndAddr(blockchain, allPeers)
+    val (maxSize, maxAddr,maxHash) = maxChainSizeAndAddr(blockchain, allPeers)
     if (maxSize > blockchain.size()){
-        println("maxsize = $maxSize, maxAddr = $maxAddr")
-            syncTheDB(blockchain,maxAddr,blockchain.size())
+        println("maxsize = $maxSize, maxAddr = $maxAddr, maxHash = $maxHash")
+        println("Syncing with longest db....")
+        syncTheDB(blockchain,maxAddr,blockchain.size())
 //            syncTheDB()
-        println("Is it here")
     }
 }
 
-suspend fun maxChainSizeAndAddr(blockchain: Blockchain, peers: List<String>): Pair<Int, String> {
+suspend fun maxChainSizeAndAddr(blockchain: Blockchain, peers: List<String>): Triple<Int, String,String> {
     try {
         val client = HttpClient(CIO)
         var size = blockchain.size()
         var truePeer = ""
+        var maxHash = ""
         for (peer in peers) {
             println("peer = $peer")
             try {
-                val response = client.get("http://$peer/size")
-                if (response.status.isSuccess()) {
-                    val recievedSize = response.bodyAsText().toInt()
-                    if (size < recievedSize) {
-                        size = recievedSize
-                        peer.also { truePeer = it }
+                val responseSizeRaw = client.get("http://$peer/size")
+                if (responseSizeRaw.status.isSuccess()) {
+                    val responseSize = responseSizeRaw.bodyAsText().toInt()
+                    if (size < responseSize) {
+                        val responseHash = client.get("http://$peer/block/hash/${responseSize-1}")
+                        if (responseHash.status.isSuccess()) {
+                            maxHash = responseHash.bodyAsText()
+                        }
+                        size = responseSize
+                        peer.also {
+                            truePeer = it
+                        }
                     }
                 }
             }catch (e:Exception){
                 println("cannot request to the address: $peer.")
             }
         }
-        return Pair(size, truePeer)
+        return Triple(size, truePeer, maxHash)
     } catch(e:Exception) {
         e.printStackTrace()
     }
-    return Pair(0,"")
+    return Triple(0,"","")
 }

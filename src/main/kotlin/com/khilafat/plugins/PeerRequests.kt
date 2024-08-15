@@ -30,11 +30,8 @@ fun syncTheDB(blockchain: Blockchain, peerAddress: String, lastIndex: Int) = run
                 if (blocksize > 0) {
                     val bytes = packet.readBytes(blocksize)
                     val block = Block.fromString(bytes.toString(Charset.defaultCharset()))
-                    println(block)
-//                    if (blockchain.size() == 0) {
-//                        blockchain.addBlock(block)
                 } else {
-//                        val latestBlock = blockchain.getLatestBlock()
+                        val latestBlock = blockchain.getLatestBlock()
                 }
             }
         }

@@ -71,6 +71,9 @@ class Blockchain {
         db.close()
     }
 
+    fun getHashByIndex(index: Int): String {
+        return getByIndex(index).hash
+    }
 
     fun getByIndex(index: Int): Block {
         if (index in 0..currentIndex) {
