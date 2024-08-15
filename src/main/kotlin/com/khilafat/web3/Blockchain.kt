@@ -66,6 +66,7 @@ class Blockchain {
     }
 
     fun getAllBlocks(): List<Block> {
+        println("${currentIndex}, Getting all blocks...")
         return List(currentIndex + 1) { index ->
             getByIndex(index)
         }
