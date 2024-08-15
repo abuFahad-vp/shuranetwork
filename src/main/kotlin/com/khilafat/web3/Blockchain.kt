@@ -9,20 +9,13 @@ import java.io.*
 
 class Blockchain {
     private val db: DB
-    private var currentIndex = 0
+    private var currentIndex = -1
     private var size = 0
     init {
         // opening the db and updating the currentIndex to last index and if there's no key, putting genesis block
         val options = Options()
         options.createIfMissing(true)
-        db = try {
-            factory.open(File("amanah.db"), options)
-        } catch (e: Exception) {
-            factory.open(File("amanah_test.db"), options)
-        }
-    }
-
-    fun initializeGenesis() {
+        db = factory.open(File("amanah.db"), options)
         db.iterator().use {
             try {
                 it.seekToFirst()
@@ -32,17 +25,16 @@ class Blockchain {
                 }
                 if (size > 0) {
                     currentIndex = size - 1
-                } else {
-                    val batch = db.createWriteBatch()
-                    batch.use { batch ->
-                        batch.put(intToBytes(0), bytes(createGenesisBlock().toString()))
-                        db.write(batch)
-                    }
                 }
             }catch(e:Exception){
                 throw e
             }
         }
+    }
+
+    fun addGenesisBlock() {
+        val block = createGenesisBlock()
+        addBlock(block)
     }
 
     fun getIterator(): DBIterator {

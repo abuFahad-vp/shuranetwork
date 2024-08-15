@@ -10,30 +10,33 @@ import kotlinx.coroutines.runBlocking
 
 fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
     val allPeers = peers.allpeers()
-    if (blockchain.size() == 0 && allPeers.isEmpty()) {blockchain.initializeGenesis()}
-    else {
-        val (maxSize, maxAddr) = maxChainSizeAndAddr(allPeers)
-        println("$maxSize, $maxAddr")
-        if (blockchain.size() < maxSize) {
-//            syncTheDB(blockchain,maxAddr,blockchain.size())
-            syncTheDB()
-        }
+    val (maxSize, maxAddr) = maxChainSizeAndAddr(blockchain, allPeers)
+    if (maxSize > blockchain.size()){
+        println("maxsize = $maxSize, maxAddr = $maxAddr")
+            syncTheDB(blockchain,maxAddr,blockchain.size())
+//            syncTheDB()
+        println("Is it here")
     }
 }
 
-suspend fun maxChainSizeAndAddr(peers: List<String>): Pair<Int, String> {
+suspend fun maxChainSizeAndAddr(blockchain: Blockchain, peers: List<String>): Pair<Int, String> {
     try {
         val client = HttpClient(CIO)
-        var size = 0
+        var size = blockchain.size()
         var truePeer = ""
         for (peer in peers) {
-            val response = client.get("http://$peer/size")
-            if (response.status.isSuccess()) {
-                val recievedSize = response.bodyAsText().toInt()
-                if (size < recievedSize) {
-                    size = recievedSize
-                    peer.also { truePeer = it }
+            println("peer = $peer")
+            try {
+                val response = client.get("http://$peer/size")
+                if (response.status.isSuccess()) {
+                    val recievedSize = response.bodyAsText().toInt()
+                    if (size < recievedSize) {
+                        size = recievedSize
+                        peer.also { truePeer = it }
+                    }
                 }
+            }catch (e:Exception){
+                println("cannot request to the address: $peer.")
             }
         }
         return Pair(size, truePeer)

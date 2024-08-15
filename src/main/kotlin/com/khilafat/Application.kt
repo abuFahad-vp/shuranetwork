@@ -17,7 +17,8 @@ import java.net.http.HttpClient
 
 fun main(args: Array<String>) {
     val port = args.getOrElse(0) {"8080"}.toInt()
-    embeddedServer(Netty, port = port, host = "0.0.0.0", module = Application::module)
+    PORT = port
+    embeddedServer(Netty, port = PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 
@@ -28,7 +29,6 @@ fun Application.module() {
     println("Peers = ${peerdb.allpeers()}")
     environment.monitor.subscribe(ApplicationStopped) {
         blockchain.closeTheDb()
-        peerdb.closeTheDb()
         println("The DB has beed closed")
     }
     configureSerialization()

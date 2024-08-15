@@ -10,18 +10,17 @@ import io.ktor.client.statement.*
 import io.ktor.utils.io.charsets.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.runBlocking
-import java.nio.ByteBuffer
 
-fun main() {
-    syncTheDB()
-}
+//fun main() {
+//    syncTheDB()
+//}
 
-fun syncTheDB() = runBlocking {
-//fun syncTheDB(blockchain: Blockchain, peerAddress: String, lastIndex: Int) = runBlocking {
+//fun syncTheDB() = runBlocking {
+fun syncTheDB(blockchain: Blockchain, peerAddress: String, lastIndex: Int) = runBlocking {
     val client = HttpClient(CIO)
     try {
-//        val response: HttpResponse = client.get("http://$peerAddress/sync/$lastIndex")
-        val response: HttpResponse = client.get("http://localhost:8080/sync/0")
+        val response: HttpResponse = client.get("http://$peerAddress/sync/$lastIndex")
+//        val response: HttpResponse = client.get("http://localhost:8080/sync/0")
         val channel = response.bodyAsChannel()
         while (!channel.isClosedForRead) {
             val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
