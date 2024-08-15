@@ -26,10 +26,11 @@ fun syncTheDB(blockchain: Blockchain, peerAddress: String, lastIndex: Int) = run
             val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
             while (!packet.isEmpty) {
                 val blocksize = byteToInt(packet.readBytes(4))
-                println("block size = $blocksize")
+//                println("block size = $blocksize")
                 if (blocksize > 0) {
                     val bytes = packet.readBytes(blocksize)
                     val block = Block.fromString(bytes.toString(Charset.defaultCharset()))
+                    println(block)
                     blockchain.addBlock(block)
                 }
             }
