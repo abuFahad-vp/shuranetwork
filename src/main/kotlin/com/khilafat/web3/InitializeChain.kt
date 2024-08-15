@@ -16,7 +16,7 @@ fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
         println("Syncing with longest db....")
         val startIndexToSync = if (blockchain.size() == 0) 0 else {
             if (hashOfSameIndex == blockchain.getLatestHash()) {
-                blockchain.size() - 1
+                blockchain.size()
             }
             throw Exception("the blockchain indexing is not matching. Try to delete the DB and download from start")
         }
