@@ -38,7 +38,6 @@ class Blockchain {
             batch.put(intToBytes(currentIndex), bytes(createGenesisBlock().toString()))
             db.write(batch)
         }
-        currentIndex++
         size++
     }
 
