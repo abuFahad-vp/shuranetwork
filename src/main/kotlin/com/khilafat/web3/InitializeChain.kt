@@ -23,6 +23,7 @@ fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
         syncTheDB(blockchain,maxAddr,startIndexToSync)
 //            syncTheDB()
     } else {
+        println("Is working")
         blockchain.addGenesisBlock()
     }
 }
