@@ -9,7 +9,7 @@ import java.io.*
 
 class Blockchain {
     private val db: DB
-    private var currentIndex = -1
+    private var currentIndex = 0
     private var size = 0
     init {
         // opening the db and updating the currentIndex to last index and if there's no key, putting genesis block

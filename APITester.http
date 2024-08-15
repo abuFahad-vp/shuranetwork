@@ -1,4 +1,4 @@
-POST localhost:8080/block
+POST 192.168.0.105:8080/block
 Content-Type: text/plain
 
 Another three
