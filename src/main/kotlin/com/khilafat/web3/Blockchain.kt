@@ -46,17 +46,15 @@ class Blockchain {
     }
 
     fun addBlock(block: Block): Boolean {
-        if (block.index + 1 == currentIndex) {
-            if (block.previousHash == getLatestBlock().hash) {
-                val batch = db.createWriteBatch()
-                batch.use { batch ->
-                    batch.put(intToBytes(currentIndex + 1), bytes(block.toString()))
-                    db.write(batch)
-                }
-                currentIndex++
-                size++
-                return true
+        if (block.previousHash == getLatestBlock().hash) {
+            val batch = db.createWriteBatch()
+            batch.use { batch ->
+                batch.put(intToBytes(currentIndex + 1), bytes(block.toString()))
+                db.write(batch)
             }
+            currentIndex++
+            size++
+            return true
         }
         return false
     }
@@ -76,6 +74,7 @@ class Blockchain {
     }
 
     fun getLatestHash(): String {
+        if (size == 0) return "0"
         return getHashByIndex(currentIndex)
     }
 
