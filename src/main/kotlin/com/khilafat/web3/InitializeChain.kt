@@ -10,11 +10,17 @@ import kotlinx.coroutines.runBlocking
 
 fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
     val allPeers = peers.allpeers()
-    val (maxSize, maxAddr,maxHash) = maxChainSizeAndAddr(blockchain, allPeers)
-    println("maxsize = $maxSize, maxAddr = $maxAddr, maxHash = $maxHash")
+    val (maxSize, maxAddr, hashOfSameIndex) = maxChainSizeAndAddr(blockchain, allPeers)
+    println("maxsize = $maxSize, maxAddr = $maxAddr, hashOfSameIndex = $hashOfSameIndex")
     if (maxSize > blockchain.size()){
         println("Syncing with longest db....")
-        syncTheDB(blockchain,maxAddr,blockchain.size())
+        val startIndexToSync = if (blockchain.size() == 0) 0 else {
+            if (hashOfSameIndex == blockchain.getLatestHash()) {
+                blockchain.size() - 1
+            }
+            throw Exception("the blockchain indexing is not matching. Try to delete the DB and download from start")
+        }
+        syncTheDB(blockchain,maxAddr,startIndexToSync)
 //            syncTheDB()
     }
 }
