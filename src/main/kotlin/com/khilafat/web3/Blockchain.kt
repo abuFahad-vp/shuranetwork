@@ -46,7 +46,7 @@ class Blockchain {
     }
 
     fun addBlock(block: Block): Boolean {
-        if (block.previousHash == getLatestBlock().hash) {
+        if (size == 0 || (block.previousHash == getLatestBlock().hash)) {
             val batch = db.createWriteBatch()
             batch.use { batch ->
                 batch.put(intToBytes(currentIndex + 1), bytes(block.toString()))
@@ -74,7 +74,6 @@ class Blockchain {
     }
 
     fun getLatestHash(): String {
-        if (size == 0) return "0"
         return getHashByIndex(currentIndex)
     }
 
