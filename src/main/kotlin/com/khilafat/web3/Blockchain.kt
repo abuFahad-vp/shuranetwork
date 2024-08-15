@@ -54,7 +54,7 @@ class Blockchain {
             println("Adding a Block....")
             val batch = db.createWriteBatch()
             batch.use { batch ->
-                batch.put(intToBytes(currentIndex + 1), bytes(block.toString()))
+                batch.put(intToBytes(size), bytes(block.toString()))
                 db.write(batch)
             }
             currentIndex++
