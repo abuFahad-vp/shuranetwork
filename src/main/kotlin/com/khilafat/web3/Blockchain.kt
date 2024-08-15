@@ -33,8 +33,13 @@ class Blockchain {
     }
 
     fun addGenesisBlock() {
-        val block = createGenesisBlock()
-        addBlock(block)
+        val batch = db.createWriteBatch()
+        batch.use { batch ->
+            batch.put(intToBytes(currentIndex), bytes(createGenesisBlock().toString()))
+            db.write(batch)
+        }
+        currentIndex++
+        size++
     }
 
     fun getIterator(): DBIterator {
@@ -46,8 +51,8 @@ class Blockchain {
     }
 
     fun addBlock(block: Block): Boolean {
-        if (size == 0 || (block.previousHash == getLatestBlock().hash)) {
-            println("In here")
+        if (block.previousHash == getLatestBlock().hash) {
+            println("Adding a Block....")
             val batch = db.createWriteBatch()
             batch.use { batch ->
                 batch.put(intToBytes(currentIndex + 1), bytes(block.toString()))
