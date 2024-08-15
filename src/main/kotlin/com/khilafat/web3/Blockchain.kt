@@ -85,6 +85,7 @@ class Blockchain {
     }
 
     fun getByIndex(index: Int): Block {
+        println("Accessing the block of index: $index")
         if (index in 0..currentIndex) {
             val value = asString(db.get(intToBytes(index)))
             val block = Block.fromString(value)
