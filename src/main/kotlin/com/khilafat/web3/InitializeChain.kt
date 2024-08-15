@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
 fun initializeChain(blockchain: Blockchain, peers: Peers) = runBlocking {
     val allPeers = peers.allpeers()
     val (maxSize, maxAddr,maxHash) = maxChainSizeAndAddr(blockchain, allPeers)
+    println("maxsize = $maxSize, maxAddr = $maxAddr, maxHash = $maxHash")
     if (maxSize > blockchain.size()){
-        println("maxsize = $maxSize, maxAddr = $maxAddr, maxHash = $maxHash")
         println("Syncing with longest db....")
         syncTheDB(blockchain,maxAddr,blockchain.size())
 //            syncTheDB()
